@@ -1,16 +1,13 @@
 import { Module } from '@nestjs/common';
 import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
-import * as dotenv from 'dotenv';
-
-const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`;
+import Configuration from 'configuration';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath,
-      load: [() => dotenv.config({ path: '.env' })],
+      load: [Configuration],
     }),
     UserModule,
   ],
