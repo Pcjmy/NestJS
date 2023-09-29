@@ -14,6 +14,7 @@ export class UserController {
   getUsers(): any {
     const db = this.configService.get(ConfigEnum.DB);
     const host = this.configService.get(ConfigEnum.DB_HOST);
+    const url = this.configService.get('DB_URL');
     return this.userService.getUsers();
   }
 }
