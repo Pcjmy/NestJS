@@ -11,10 +11,11 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: example
     ports:
-      - 3090:3306
+      - 3306:3306
 
+  # navicat
   adminer:
     image: adminer
     restart: always
     ports:
-      - 8090:8080
+      - 8080:8080
