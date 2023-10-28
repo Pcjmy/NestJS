@@ -1,7 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ConfigService } from '@nestjs/config';
-import { ConfigEnum } from 'src/enum/config.enum';
 
 @Controller('user')
 export class UserController {
