@@ -2,9 +2,10 @@ import { Module } from '@nestjs/common';
 import { UserModule } from './user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { ConfigEnum } from 'src/enum/config.enum';
-import Configuration from 'configuration';
+import { ConfigEnum } from './enum/config.enum';
+import * as dotenv from 'dotenv';
 import * as Joi from 'joi';
+import { User } from './user/user.entity';
 
 const envFilePath = `.env.${process.env.NODE_ENV || `development`}`;
 
@@ -13,7 +14,7 @@ const envFilePath = `.env.${process.env.NODE_ENV || `development`}`;
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath,
-      load: [Configuration],
+      load: [() => dotenv.config({ path: '.env' })],
       validationSchema: Joi.object({
         NODE_ENV: Joi.string()
           .valid('development', 'production')
@@ -33,12 +34,15 @@ const envFilePath = `.env.${process.env.NODE_ENV || `development`}`;
       useFactory: (configService: ConfigService) =>
         ({
           type: configService.get(ConfigEnum.DB_TYPE),
-          host: configService.get(ConfigEnum.DB_HOST),
+          // 加这个配置报错，先注释掉
+          // ERROR [TypeOrmModule] Unable to connect to the database. Retrying (1)...
+          // Error: Access denied for user 'root'@'localhost' (using password: YES)
+          // host: configService.get(ConfigEnum.DB_HOST),
           port: configService.get(ConfigEnum.DB_PORT),
           username: configService.get(ConfigEnum.DB_USERNAME),
           password: configService.get(ConfigEnum.DB_PASSWORD),
           database: configService.get(ConfigEnum.DB_DATABASE),
-          entities: [],
+          entities: [User],
           // 同步本地的schema与数据库 -> 初始化的时候去使用
           synchronize: configService.get(ConfigEnum.DB_SYNC),
           logging: ['error'],
