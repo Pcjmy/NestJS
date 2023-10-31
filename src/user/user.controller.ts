@@ -1,6 +1,7 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ConfigService } from '@nestjs/config';
+import { User } from './user.entity';
 
 @Controller('user')
 export class UserController {
@@ -11,8 +12,12 @@ export class UserController {
 
   @Get()
   getUsers(): any {
-    const data = this.configService.get('db');
-    console.log(data);
-    return this.userService.getUsers();
+    return this.userService.findAll();
+  }
+
+  @Post()
+  addUser(): any {
+    const user = { username: 'zhangsan', password: '123456' } as User;
+    return this.userService.create(user);
   }
 }
