@@ -20,4 +20,14 @@ export class UserController {
     const user = { username: 'zhangsan', password: '123456' } as User;
     return this.userService.create(user);
   }
+
+  @Get('/profile')
+  getUserProfile(): any {
+    return this.userService.findProfile(2);
+  }
+
+  @Get('/logs')
+  getUserLogs(): any {
+    return this.userService.findUserLogs(2);
+  }
 }
