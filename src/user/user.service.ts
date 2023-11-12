@@ -60,14 +60,15 @@ export class UserService {
   }
 
   findLogsByGroup(id: number) {
-    return this.logsRepository
-      .createQueryBuilder('logs')
-      .select('logs.result', 'result')
-      .addSelect('COUNT("logs.result")', 'count')
-      .leftJoinAndSelect('logs.user', 'user')
-      .where('user.id = :id', { id })
-      .groupBy('logs.result')
-      .orderBy('result', 'DESC')
-      .getRawMany();
+    return this.logsRepository.query('SELECT * FROM logs');
+    // return this.logsRepository
+    //   .createQueryBuilder('logs')
+    //   .select('logs.result', 'result')
+    //   .addSelect('COUNT("logs.result")', 'count')
+    //   .leftJoinAndSelect('logs.user', 'user')
+    //   .where('user.id = :id', { id })
+    //   .groupBy('logs.result')
+    //   .orderBy('result', 'DESC')
+    //   .getRawMany();
   }
 }
