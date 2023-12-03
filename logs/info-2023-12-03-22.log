@@ -1,0 +1,11 @@
+info: UserController {/api/v1/user}: {"context":"RoutesResolver","timestamp":"2023-12-03T14:04:24.032Z"}
+info: Mapped {/api/v1/user, GET} route {"context":"RouterExplorer","timestamp":"2023-12-03T14:04:24.040Z"}
+info: Mapped {/api/v1/user, POST} route {"context":"RouterExplorer","timestamp":"2023-12-03T14:04:24.042Z"}
+info: Mapped {/api/v1/user/profile, GET} route {"context":"RouterExplorer","timestamp":"2023-12-03T14:04:24.044Z"}
+info: Mapped {/api/v1/user/logs, GET} route {"context":"RouterExplorer","timestamp":"2023-12-03T14:04:24.045Z"}
+info: Mapped {/api/v1/user/logsByGroup, GET} route {"context":"RouterExplorer","timestamp":"2023-12-03T14:04:24.047Z"}
+info: LogsController {/api/v1/logs}: {"context":"RoutesResolver","timestamp":"2023-12-03T14:04:24.048Z"}
+info: Nest application successfully started {"context":"NestApplication","timestamp":"2023-12-03T14:04:24.052Z"}
+info: 请求getUsers成功 {"timestamp":"2023-12-03T14:04:38.980Z"}
+warn: 请求getUsers成功 {"timestamp":"2023-12-03T14:04:38.982Z"}
+error: 请求getUsers成功 {"stack":[null],"timestamp":"2023-12-03T14:04:38.984Z"}
