@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Logger } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Logger,
+  Body,
+  Patch,
+  Param,
+  Query,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { ConfigService } from '@nestjs/config';
 import { User } from './user.entity';
@@ -15,6 +24,20 @@ export class UserController {
     this.logger.log('UserController init');
   }
 
+  @Get('/profile')
+  getUserProfile(@Query('id') query: any): any {
+    console.log(
+      '🚀 ~ file: user.controller.ts:29 ~ UserController ~ getUserProfile ~ query:',
+      query,
+    );
+    return this.userService.findProfile(2);
+  }
+
+  @Get('/:id')
+  getUser(): any {
+    return 'hello world';
+  }
+
   @Get()
   getUsers(): any {
     this.logger.log('请求getUsers成功');
@@ -24,14 +47,19 @@ export class UserController {
   }
 
   @Post()
-  addUser(): any {
+  addUser(@Body() dto: any): any {
+    console.log(
+      '🚀 ~ file: user.controller.ts:36 ~ UserController ~ addUser ~ dto:',
+      dto,
+    );
     const user = { username: 'zhangsan', password: '123456' } as User;
     return this.userService.create(user);
   }
 
-  @Get('/profile')
-  getUserProfile(): any {
-    return this.userService.findProfile(2);
+  @Patch('/:id')
+  updateUser(@Body() dto: any, @Param('id') id: number): any {
+    const user = dto as User;
+    return this.userService.update(id, user);
   }
 
   @Get('/logs')

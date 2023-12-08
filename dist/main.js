@@ -461,6 +461,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -510,18 +513,27 @@ var UserController = /** @class */ (function () {
         this.logger = logger;
         this.logger.log('UserController init');
     }
+    UserController.prototype.getUserProfile = function (query) {
+        console.log('🚀 ~ file: user.controller.ts:29 ~ UserController ~ getUserProfile ~ query:', query);
+        return this.userService.findProfile(2);
+    };
+    UserController.prototype.getUser = function () {
+        return 'hello world';
+    };
     UserController.prototype.getUsers = function () {
         this.logger.log('请求getUsers成功');
         this.logger.warn("\u8BF7\u6C42getUsers\u6210\u529F");
         this.logger.error("\u8BF7\u6C42getUsers\u6210\u529F");
         return this.userService.findAll();
     };
-    UserController.prototype.addUser = function () {
+    UserController.prototype.addUser = function (dto) {
+        console.log('🚀 ~ file: user.controller.ts:36 ~ UserController ~ addUser ~ dto:', dto);
         var user = { username: 'zhangsan', password: '123456' };
         return this.userService.create(user);
     };
-    UserController.prototype.getUserProfile = function () {
-        return this.userService.findProfile(2);
+    UserController.prototype.updateUser = function (dto, id) {
+        var user = dto;
+        return this.userService.update(id, user);
     };
     UserController.prototype.getUserLogs = function () {
         return this.userService.findUserLogs(2);
@@ -544,6 +556,19 @@ var UserController = /** @class */ (function () {
     };
     var _a, _b, _c, _d;
     __decorate([
+        (0, common_1.Get)('/profile'),
+        __param(0, (0, common_1.Query)('id')),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", Object)
+    ], UserController.prototype, "getUserProfile", null);
+    __decorate([
+        (0, common_1.Get)('/:id'),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", Object)
+    ], UserController.prototype, "getUser", null);
+    __decorate([
         (0, common_1.Get)(),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
@@ -551,16 +576,19 @@ var UserController = /** @class */ (function () {
     ], UserController.prototype, "getUsers", null);
     __decorate([
         (0, common_1.Post)(),
+        __param(0, (0, common_1.Body)()),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", []),
+        __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", Object)
     ], UserController.prototype, "addUser", null);
     __decorate([
-        (0, common_1.Get)('/profile'),
+        (0, common_1.Patch)('/:id'),
+        __param(0, (0, common_1.Body)()),
+        __param(1, (0, common_1.Param)('id')),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", []),
+        __metadata("design:paramtypes", [Object, Number]),
         __metadata("design:returntype", Object)
-    ], UserController.prototype, "getUserProfile", null);
+    ], UserController.prototype, "updateUser", null);
     __decorate([
         (0, common_1.Get)('/logs'),
         __metadata("design:type", Function),
@@ -1235,7 +1263,7 @@ exports.LogsService = LogsService;
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("cb629382cdb7186fcd04")
+/******/ 		__webpack_require__.h = () => ("d8c57f8226d7a93aaacc")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
