@@ -11,6 +11,7 @@ import {
 import { UserService } from './user.service';
 import { ConfigService } from '@nestjs/config';
 import { User } from './user.entity';
+import { getUserDto } from './dto/get-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -39,11 +40,12 @@ export class UserController {
   }
 
   @Get()
-  getUsers(): any {
-    this.logger.log('请求getUsers成功');
-    this.logger.warn(`请求getUsers成功`);
-    this.logger.error(`请求getUsers成功`);
-    return this.userService.findAll();
+  getUsers(@Query() query: getUserDto): any {
+    console.log(
+      '🚀 ~ file: user.controller.ts:51 ~ UserController ~ getUsers ~ query:',
+      query,
+    );
+    return this.userService.findAll(query);
   }
 
   @Post()
