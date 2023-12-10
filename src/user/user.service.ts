@@ -17,30 +17,31 @@ export class UserService {
     const take = limit || 10;
     const skip = ((page || 1) - 1) * take;
 
-    return this.userRepository.find({
-      select: {
-        id: true,
-        username: true,
-        profile: {
-          gender: true,
-        },
-      },
-      relations: {
-        profile: true,
-        roles: true,
-      },
-      where: {
-        username,
-        profile: {
-          gender,
-        },
-        roles: {
-          id: role,
-        },
-      },
-      take,
-      skip,
-    });
+    const obj = {
+      'user.username': username,
+      'profile.gender': gender,
+      'roles.id': role,
+    };
+    // inner join vs left join vs outer join
+    const queryBuilder = this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.profile', 'profile')
+      .leftJoinAndSelect('user.roles', 'roles');
+    if (gender) {
+      queryBuilder.andWhere('profile.gender = :gender', { gender });
+    } else {
+      queryBuilder.andWhere('profile.gender IS NOT NULL');
+    }
+    if (role) {
+      queryBuilder.andWhere('roles.id = :role', { role });
+    } else {
+      queryBuilder.andWhere('roles.id IS NOT NULL');
+    }
+
+    return queryBuilder
+      .andWhere('profile.gender = :gender', { gender })
+      .andWhere('roles.id = :role', { role })
+      .getMany();
   }
 
   find(username: string) {
