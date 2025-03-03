@@ -22,6 +22,6 @@ export class Profile {
   address: string;
 
   @OneToOne(() => User)
-  @JoinColumn({ name: 'uid' })
+  @JoinColumn()
   user: User;
 }
