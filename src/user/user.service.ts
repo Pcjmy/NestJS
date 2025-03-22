@@ -4,6 +4,7 @@ import { User } from './user.entity';
 import { Repository } from 'typeorm';
 import { Logs } from '../logs/logs.entity';
 import { getUserDto } from './dto/get-user.dto';
+import { conditionUtils } from '../utils/db.helper';
 
 @Injectable()
 export class UserService {
@@ -17,29 +18,17 @@ export class UserService {
     const take = limit || 10;
     const skip = ((page || 1) - 1) * take;
 
+    let obj = {
+      'user.username': username,
+      'profile.gender': gender,
+      'roles.id': role,
+    };
     // inner join vs left join vs outer join
     const queryBuilder = this.userRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.profile', 'profile')
       .leftJoinAndSelect('user.roles', 'roles');
-    // if (username) {
-    //   queryBuilder.where('user.username = :username', { username });
-    // } else {
-    //   queryBuilder.where('user.username IS NOT NULL');
-    // }
-    // WHERE 1=1 AND ...
-    queryBuilder.andWhere(username ? 'user.username = :username' : '1=1', {
-      username,
-    });
-    let obj = {
-      'profile.gender': gender,
-      'roles.id': role,
-    };
-    Object.keys(obj).forEach((key) => {
-      if (obj[key]) {
-        queryBuilder.andWhere(`${key} = :${key}`, { [key]: obj[key] });
-      }
-    });
+    const newQuery = conditionUtils<User>(queryBuilder, obj);
     // if (gender) {
     //   queryBuilder.andWhere('profile.gender = :gender', { gender });
     // } else {
@@ -52,7 +41,9 @@ export class UserService {
     // }
 
     return (
-      queryBuilder
+      newQuery
+        .take(take)
+        .skip(skip)
         // .andWhere('profile.gender = :gender', { gender })
         // .andWhere('roles.id = :role', { role })
         .getMany()
