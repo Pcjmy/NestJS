@@ -17,31 +17,46 @@ export class UserService {
     const take = limit || 10;
     const skip = ((page || 1) - 1) * take;
 
-    const obj = {
-      'user.username': username,
-      'profile.gender': gender,
-      'roles.id': role,
-    };
     // inner join vs left join vs outer join
     const queryBuilder = this.userRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.profile', 'profile')
       .leftJoinAndSelect('user.roles', 'roles');
-    if (gender) {
-      queryBuilder.andWhere('profile.gender = :gender', { gender });
-    } else {
-      queryBuilder.andWhere('profile.gender IS NOT NULL');
-    }
-    if (role) {
-      queryBuilder.andWhere('roles.id = :role', { role });
-    } else {
-      queryBuilder.andWhere('roles.id IS NOT NULL');
-    }
+    // if (username) {
+    //   queryBuilder.where('user.username = :username', { username });
+    // } else {
+    //   queryBuilder.where('user.username IS NOT NULL');
+    // }
+    // WHERE 1=1 AND ...
+    queryBuilder.andWhere(username ? 'user.username = :username' : '1=1', {
+      username,
+    });
+    let obj = {
+      'profile.gender': gender,
+      'roles.id': role,
+    };
+    Object.keys(obj).forEach((key) => {
+      if (obj[key]) {
+        queryBuilder.andWhere(`${key} = :${key}`, { [key]: obj[key] });
+      }
+    });
+    // if (gender) {
+    //   queryBuilder.andWhere('profile.gender = :gender', { gender });
+    // } else {
+    //   queryBuilder.andWhere('profile.gender IS NOT NULL');
+    // }
+    // if (role) {
+    //   queryBuilder.andWhere('roles.id = :role', { role });
+    // } else {
+    //   queryBuilder.andWhere('roles.id IS NOT NULL');
+    // }
 
-    return queryBuilder
-      .andWhere('profile.gender = :gender', { gender })
-      .andWhere('roles.id = :role', { role })
-      .getMany();
+    return (
+      queryBuilder
+        // .andWhere('profile.gender = :gender', { gender })
+        // .andWhere('roles.id = :role', { role })
+        .getMany()
+    );
   }
 
   find(username: string) {
